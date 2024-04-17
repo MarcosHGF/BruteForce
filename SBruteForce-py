@@ -1,0 +1,28 @@
+import random as r
+
+#functions
+
+def concatenate_int(a, b, c, d):
+    concat = int(str(a) + str(b) + str(c) + str(d))
+    return concat
+
+
+#main
+
+password = 4831
+sample = 0000
+i = 0
+while(sample != password):
+
+    a = r.randint(0,9)
+    b = r.randint(0,9)
+    c = r.randint(0,9)
+    d = r.randint(0,9)
+
+    sample = concatenate_int(a, b, c, d)
+
+    i += 1
+
+    print(sample, "tentativa :", i)
+
+print("senha quebrada : ", sample)
