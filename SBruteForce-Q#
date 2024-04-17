@@ -1,0 +1,60 @@
+namespace QuantumRandomNumberGenerator {
+    open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.Math;
+
+    @EntryPoint()
+    operation Main() : Int {
+        let max = 9999;
+        let password = 1653;
+        let i = 0;
+        Message($"Cracking your password : ");
+
+        // Generate random number in the 0..max range.
+        return GenerateRandomNumberInRange(max, password, i);
+    }
+
+    /// Generates a random number between 0 and `max`.
+    operation GenerateRandomNumberInRange(max : Int, password : Int, i : Int) : Int {
+
+        mutable bits = [];
+        let nBits = BitSizeI(max);
+        for idxBit in 1..nBits {
+            set bits += [GenerateRandomBit()]; 
+        }
+        let sample = ResultArrayAsInt(bits);
+        // Return random number if it is within the requested range.
+        // Generate it again if it is outside the range.
+        if sample == password {
+                return sample;
+        }
+
+        if sample > max {
+            return GenerateRandomNumberInRange(max, password, i);
+        }
+        
+        let i = i + 1;
+
+        Message($"teste : {sample}");
+        Message($"tentativa número : {i}");
+
+        return GenerateRandomNumberInRange(max, password, i);
+    }
+
+    operation GenerateRandomBit() : Result {
+        // Allocate a qubit.
+        use q = Qubit();
+
+        // Set the qubit into superposition of 0 and 1 using the Hadamard operation
+        H(q);
+
+        // Measure the qubit value
+        let result = M(q);
+
+        // Reset qubit to the 0 state.
+        Reset(q);
+
+        // Return the result of the measurement.
+        return result;
+    }
+}
